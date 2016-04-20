@@ -72,7 +72,7 @@ public class TileMessage extends TileRadioBase implements IGuiTile, IPacketIDRec
             updateClient = true;
             chatLog.add("" + data[0] + ": " + data[1]);
             //Remove oldest entry from the list
-            if (chatLog.size() > 100)
+            if (chatLog.size() > 30)
             {
                 chatLog.poll();
             }

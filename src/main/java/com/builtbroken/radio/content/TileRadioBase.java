@@ -75,7 +75,7 @@ public abstract class TileRadioBase extends Tile implements IRadioWaveExternalRe
     {
         if (!world().isRemote && Math.abs(this.hz - hz) < .001 && (!inSecureMode || data.length >= 3 && data[2] instanceof Short && ((Short) data[2]) == passKey))
         {
-
+            receiveExternalRadioWave(messageHeader, data);
         }
     }
 
