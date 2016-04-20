@@ -1,13 +1,17 @@
 package com.builtbroken.radio;
 
+import com.builtbroken.mc.core.registry.ModManager;
 import com.builtbroken.mc.lib.mod.AbstractMod;
 import com.builtbroken.mc.lib.mod.AbstractProxy;
+import com.builtbroken.mc.lib.mod.ModCreativeTab;
+import com.builtbroken.radio.content.message.TileMessage;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 
 /**
  * Simple mod to test the radio system in voltz engine
@@ -32,6 +36,14 @@ public class RadioMod extends AbstractMod
     public RadioMod()
     {
         super("veradiomod");
+        manager.defaultTab = new ModCreativeTab("radiomod");
+    }
+
+    @Override
+    protected void loadBlocks(ModManager manager)
+    {
+        blockMessage = manager.newBlock(TileMessage.class);
+        ((ModCreativeTab)manager.defaultTab).itemStack = new ItemStack(blockMessage);
     }
 
     @Mod.EventHandler

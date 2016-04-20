@@ -1,21 +1,22 @@
 package com.builtbroken.radio.content.message;
 
-import com.builtbroken.mc.api.map.radio.IRadioWaveReceiver;
 import com.builtbroken.mc.api.map.radio.IRadioWaveSender;
 import com.builtbroken.mc.api.tile.IGuiTile;
 import com.builtbroken.mc.core.network.IPacketIDReceiver;
 import com.builtbroken.mc.core.network.packet.PacketTile;
 import com.builtbroken.mc.core.network.packet.PacketType;
+import com.builtbroken.mc.lib.transform.vector.Pos;
 import com.builtbroken.mc.prefab.gui.ContainerDummy;
 import com.builtbroken.mc.prefab.tile.Tile;
+import com.builtbroken.radio.RadioMod;
 import com.builtbroken.radio.content.TileRadioBase;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
 import java.util.LinkedList;
-import java.util.Queue;
 
 /**
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
@@ -23,11 +24,14 @@ import java.util.Queue;
  */
 public class TileMessage extends TileRadioBase implements IGuiTile, IPacketIDReceiver
 {
-    float hz = 0;
-
-    Queue<String> chatLog = new LinkedList();
+    LinkedList<String> chatLog = new LinkedList();
 
     boolean updateClient = false;
+
+    public TileMessage()
+    {
+        super("messageBox");
+    }
 
     @Override
     public void update()
@@ -36,9 +40,19 @@ public class TileMessage extends TileRadioBase implements IGuiTile, IPacketIDRec
     }
 
     @Override
+    protected boolean onPlayerRightClick(EntityPlayer player, int side, Pos hit)
+    {
+        if (!world().isRemote)
+        {
+            openGui(player, RadioMod.INSTANCE);
+        }
+        return true;
+    }
+
+    @Override
     public void doUpdateGuiUsers()
     {
-        if (updateClient || ticks % 5 == 0)
+        if (updateClient || ticks % 20 == 0) //Its a large packets so delay by a second
         {
             //TODO find a better way to update this without sending the entire list
             PacketTile packet = new PacketTile(this, 2, chatLog.size());
@@ -51,19 +65,16 @@ public class TileMessage extends TileRadioBase implements IGuiTile, IPacketIDRec
     }
 
     @Override
-    public void receiveExternalRadioWave(float hz, IRadioWaveSender sender, IRadioWaveReceiver receiver, String messageHeader, Object[] data)
+    public void receiveExternalRadioWave(String messageHeader, Object[] data)
     {
-        if (!world().isRemote && Math.abs(this.hz - hz) < .001)
+        if ("chatMessage".equals(messageHeader) && data.length >= 2)
         {
-            if ("chatMessage".equals(messageHeader) && data.length >= 2)
+            updateClient = true;
+            chatLog.add("" + data[0] + ": " + data[1]);
+            //Remove oldest entry from the list
+            if (chatLog.size() > 100)
             {
-                updateClient = true;
-                chatLog.add("" + data[0] + ": " + data[1]);
-                //Remove oldest entry from the list
-                if (chatLog.size() > 100)
-                {
-                    chatLog.poll();
-                }
+                chatLog.poll();
             }
         }
     }
@@ -130,5 +141,38 @@ public class TileMessage extends TileRadioBase implements IGuiTile, IPacketIDRec
     public Object getClientGuiElement(int ID, EntityPlayer player)
     {
         return new GuiMessageTile(player, this);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound nbt)
+    {
+        super.readFromNBT(nbt);
+
+        if (nbt.hasKey("chatLog"))
+        {
+            chatLog.clear();
+            NBTTagCompound log = nbt.getCompoundTag("chatLog");
+            int size = log.getInteger("size");
+            for (int i = 0; i < size; i++)
+            {
+                chatLog.add(log.getString("s" + i));
+            }
+        }
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound nbt)
+    {
+        super.writeToNBT(nbt);
+        if (chatLog.size() > 0)
+        {
+            NBTTagCompound log = new NBTTagCompound();
+            log.setInteger("size", chatLog.size());
+            for (int i = 0; i < chatLog.size(); i++)
+            {
+                log.setString("s" + i, chatLog.get(i));
+            }
+            nbt.setTag("chatLog", log);
+        }
     }
 }
