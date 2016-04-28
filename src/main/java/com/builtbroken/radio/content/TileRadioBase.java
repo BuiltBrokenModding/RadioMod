@@ -3,6 +3,7 @@ package com.builtbroken.radio.content;
 import com.builtbroken.mc.api.map.radio.IRadioWaveExternalReceiver;
 import com.builtbroken.mc.api.map.radio.IRadioWaveReceiver;
 import com.builtbroken.mc.api.map.radio.IRadioWaveSender;
+import com.builtbroken.mc.lib.transform.region.Cube;
 import com.builtbroken.mc.prefab.tile.Tile;
 import net.minecraft.block.material.Material;
 import net.minecraft.nbt.NBTTagCompound;
@@ -80,6 +81,12 @@ public abstract class TileRadioBase extends Tile implements IRadioWaveExternalRe
     }
 
     public void receiveExternalRadioWave(String messageHeader, Object[] data)
+    {
+
+    }
+
+    @Override
+    public void onRangeChange(IRadioWaveReceiver receiver, Cube range)
     {
 
     }

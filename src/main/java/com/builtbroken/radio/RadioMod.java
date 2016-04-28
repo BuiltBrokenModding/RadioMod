@@ -25,7 +25,7 @@ public class RadioMod extends AbstractMod
     @Mod.Instance("veradiomod")
     public static RadioMod INSTANCE;
 
-    @SidedProxy(clientSide = "com.builtbroken.radio.ClientProxy", serverSide = "com.builtbroken.radio.ServerProxy")
+    @SidedProxy(clientSide = "com.builtbroken.radio.ClientProxy", serverSide = "com.builtbroken.radio.CommonProxy")
     public static CommonProxy proxy;
 
     public Block blockAntenna; //Antenna for sending and receivering data
