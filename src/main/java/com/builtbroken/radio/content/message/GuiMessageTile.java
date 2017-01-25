@@ -1,6 +1,6 @@
 package com.builtbroken.radio.content.message;
 
-import com.builtbroken.mc.core.References;
+import com.builtbroken.mc.client.SharedAssets;
 import com.builtbroken.mc.prefab.gui.ContainerDummy;
 import com.builtbroken.mc.prefab.gui.GuiContainerBase;
 import net.minecraft.client.Minecraft;
@@ -26,7 +26,7 @@ public class GuiMessageTile extends GuiContainerBase
         super(new ContainerDummy(player, tile));
         this.tile = tile;
         this.player = player;
-        this.baseTexture = References.GUI__MC_EMPTY_FILE;
+        this.baseTexture = SharedAssets.GUI__MC_EMPTY_FILE;
     }
 
     @Override
