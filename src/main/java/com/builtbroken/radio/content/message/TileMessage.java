@@ -5,7 +5,7 @@ import com.builtbroken.mc.api.tile.IGuiTile;
 import com.builtbroken.mc.core.network.IPacketIDReceiver;
 import com.builtbroken.mc.core.network.packet.PacketTile;
 import com.builtbroken.mc.core.network.packet.PacketType;
-import com.builtbroken.mc.lib.transform.vector.Pos;
+import com.builtbroken.mc.imp.transform.vector.Pos;
 import com.builtbroken.mc.prefab.gui.ContainerDummy;
 import com.builtbroken.mc.prefab.tile.Tile;
 import com.builtbroken.radio.RadioMod;
