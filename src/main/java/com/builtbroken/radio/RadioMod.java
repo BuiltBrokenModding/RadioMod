@@ -19,7 +19,7 @@ import net.minecraft.item.ItemStack;
  * @see <a href="https://github.com/BuiltBrokenModding/VoltzEngine/blob/development/license.md">License</a> for what you can and can't do with the code.
  * Created by Dark(DarkGuardsman, Robert) on 4/20/2016.
  */
-@Mod(modid = "veradiomod", name = "VE Radio Mod", version = "@MAJOR@.@MINOR@.@REVIS@.@BUILD@", dependencies = "required-after:VoltzEngine;after:OpenComputers")
+@Mod(modid = "veradiomod", name = "VE Radio Mod", version = "@MAJOR@.@MINOR@.@REVIS@.@BUILD@", dependencies = "required-after:voltzengine;after:OpenComputers")
 public class RadioMod extends AbstractMod
 {
     @Mod.Instance("veradiomod")
